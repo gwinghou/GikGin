@@ -1,4 +1,4 @@
-# GikGin
+# GikGinIME
 
 
 Pinyin library.

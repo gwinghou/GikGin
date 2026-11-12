@@ -1,0 +1,66 @@
+// 设置对话框资源。
+// 文件是 UTF-8，用 code_page(65001) 告诉 rc.exe 按 UTF-8 解析中文。
+#pragma code_page(65001)
+
+#include <windows.h>
+#include "resource.h"
+
+// 左边是“常用 / 外观”侧边栏，右边显示对应页面。
+// 对话框做得比较紧凑，保证在高 DPI 缩放下也能完整显示。
+IDD_SETTINGS DIALOGEX 0, 0, 300, 154
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "极键输入法 - 设置"
+FONT 9, "Microsoft YaHei UI"
+BEGIN
+    // 左侧导航。用 LISTBOX 实现最简单的侧边栏，点一下切换右侧页面。
+    LISTBOX         IDC_SIDEBAR, 8, 8, 70, 118, LBS_NOTIFY | LBS_NOINTEGRALHEIGHT | WS_BORDER | WS_VSCROLL | WS_TABSTOP
+
+    // ===== 常用页：输入方案 + 打开模糊拼音弹窗的按钮 =====
+    GROUPBOX        "输入方案", IDC_GROUP_SCHEME, 86, 8, 206, 38
+    // 必须用 AUTORADIOBUTTON（BS_AUTORADIOBUTTON）：普通 RADIOBUTTON 不会
+    // 自动互斥，点另一个不会取消前一个，用户看起来就像“切不过去”。
+    AUTORADIOBUTTON "全拼", IDC_RADIO_FULL, 98, 24, 60, 12, WS_GROUP | WS_TABSTOP
+    AUTORADIOBUTTON "自然码双拼", IDC_RADIO_ZIRANMA, 160, 24, 100, 12, WS_TABSTOP
+
+    // 模糊拼音不再直接摆在这里，改成按钮，点击后弹出 IDD_FUZZY 独立窗口。
+    PUSHBUTTON      "模糊拼音设置(&F)...", IDC_BTN_FUZZY, 96, 58, 100, 16
+    LTEXT           "点击按钮打开独立窗口，勾选 z/zh、c/ch、s/sh。", IDC_COMMON_NOTE, 96, 82, 196, 30
+
+    // ===== 外观页：候选窗口 =====
+    GROUPBOX        "候选窗口", IDC_GROUP_APPEARANCE, 86, 8, 206, 86
+    LTEXT           "每页候选数", IDC_LABEL_PAGE, 96, 27, 65, 10
+    COMBOBOX        IDC_COMBO_PAGE, 170, 23, 55, 60, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "字体大小", IDC_LABEL_FONT, 96, 53, 65, 10
+    COMBOBOX        IDC_COMBO_FONT, 170, 49, 55, 60, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "候选词间隔", IDC_LABEL_GAP, 96, 79, 65, 10
+    COMBOBOX        IDC_COMBO_GAP, 170, 75, 55, 60, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "设置保存后，在下一次输入时生效。", IDC_APPEARANCE_NOTE, 86, 102, 206, 20
+
+    // ===== 底部按钮 =====
+    PUSHBUTTON      "应用", IDC_APPLY, 140, 134, 45, 14
+    DEFPUSHBUTTON   "确定", IDOK, 190, 134, 45, 14
+    PUSHBUTTON      "取消", IDCANCEL, 240, 134, 45, 14
+END
+
+// ====================================================================
+// 模糊拼音独立弹窗：由“常用”页的按钮打开，模态运行。
+// 上排是声母（z/zh、c/ch、s/sh），下排是韵母（in/ing、en/eng、an/ang）。
+// 点“确定”只把勾选状态写回主窗口的内存变量，
+// 真正保存仍由主窗口的“应用/确定”完成。
+// ====================================================================
+IDD_FUZZY DIALOGEX 0, 0, 210, 96
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "模糊拼音"
+FONT 9, "Microsoft YaHei UI"
+BEGIN
+    LTEXT           "勾选后，对应拼写视为等价：", IDC_STATIC, 10, 10, 190, 10
+    CHECKBOX        "z / zh", IDC_FUZZY_Z, 15, 28, 55, 12, BS_AUTOCHECKBOX | WS_TABSTOP
+    CHECKBOX        "c / ch", IDC_FUZZY_C, 80, 28, 55, 12, BS_AUTOCHECKBOX | WS_TABSTOP
+    CHECKBOX        "s / sh", IDC_FUZZY_S, 145, 28, 55, 12, BS_AUTOCHECKBOX | WS_TABSTOP
+    CHECKBOX        "in / ing", IDC_FUZZY_IN, 15, 46, 60, 12, BS_AUTOCHECKBOX | WS_TABSTOP
+    CHECKBOX        "en / eng", IDC_FUZZY_EN, 80, 46, 60, 12, BS_AUTOCHECKBOX | WS_TABSTOP
+    CHECKBOX        "an / ang", IDC_FUZZY_AN, 145, 46, 60, 12, BS_AUTOCHECKBOX | WS_TABSTOP
+    LTEXT           "设置在下一次输入时生效。", IDC_STATIC, 10, 64, 190, 10
+    DEFPUSHBUTTON   "确定", IDOK, 100, 78, 50, 14
+    PUSHBUTTON      "取消", IDCANCEL, 155, 78, 50, 14
+END

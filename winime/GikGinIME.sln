@@ -1,0 +1,51 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28701.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gikgin_core", "gikgin_core.vcxproj", "{1BF64B5E-05E4-4596-BCD9-397DBAE06647}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dictbuilder", "dictbuilder.vcxproj", "{BBD0DFAB-C1FD-4BDB-9B71-81A1E1A75FA8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "engine_test", "engine_test.vcxproj", "{75C6650B-BFB5-44D7-9253-010D3EC3F8B0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GikGinIME", "GikGinIME.vcxproj", "{E9958574-C6BF-4491-A4E4-8B896F28B65E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tsf_host", "tsf_host.vcxproj", "{9AB8C615-4B04-4A7C-949D-6063A2097880}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GikGinIMESettings", "settings.vcxproj", "{7DF501F1-4BC0-4B70-B654-949C2463F6F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1BF64B5E-05E4-4596-BCD9-397DBAE06647}.Debug|x64.ActiveCfg = Debug|x64
+		{1BF64B5E-05E4-4596-BCD9-397DBAE06647}.Debug|x64.Build.0 = Debug|x64
+		{1BF64B5E-05E4-4596-BCD9-397DBAE06647}.Release|x64.ActiveCfg = Release|x64
+		{1BF64B5E-05E4-4596-BCD9-397DBAE06647}.Release|x64.Build.0 = Release|x64
+		{BBD0DFAB-C1FD-4BDB-9B71-81A1E1A75FA8}.Debug|x64.ActiveCfg = Debug|x64
+		{BBD0DFAB-C1FD-4BDB-9B71-81A1E1A75FA8}.Debug|x64.Build.0 = Debug|x64
+		{BBD0DFAB-C1FD-4BDB-9B71-81A1E1A75FA8}.Release|x64.ActiveCfg = Release|x64
+		{BBD0DFAB-C1FD-4BDB-9B71-81A1E1A75FA8}.Release|x64.Build.0 = Release|x64
+		{75C6650B-BFB5-44D7-9253-010D3EC3F8B0}.Debug|x64.ActiveCfg = Debug|x64
+		{75C6650B-BFB5-44D7-9253-010D3EC3F8B0}.Debug|x64.Build.0 = Debug|x64
+		{75C6650B-BFB5-44D7-9253-010D3EC3F8B0}.Release|x64.ActiveCfg = Release|x64
+		{75C6650B-BFB5-44D7-9253-010D3EC3F8B0}.Release|x64.Build.0 = Release|x64
+		{E9958574-C6BF-4491-A4E4-8B896F28B65E}.Debug|x64.ActiveCfg = Debug|x64
+		{E9958574-C6BF-4491-A4E4-8B896F28B65E}.Debug|x64.Build.0 = Debug|x64
+		{E9958574-C6BF-4491-A4E4-8B896F28B65E}.Release|x64.ActiveCfg = Release|x64
+		{E9958574-C6BF-4491-A4E4-8B896F28B65E}.Release|x64.Build.0 = Release|x64
+		{9AB8C615-4B04-4A7C-949D-6063A2097880}.Debug|x64.ActiveCfg = Debug|x64
+		{9AB8C615-4B04-4A7C-949D-6063A2097880}.Debug|x64.Build.0 = Debug|x64
+		{9AB8C615-4B04-4A7C-949D-6063A2097880}.Release|x64.ActiveCfg = Release|x64
+		{9AB8C615-4B04-4A7C-949D-6063A2097880}.Release|x64.Build.0 = Release|x64
+		{7DF501F1-4BC0-4B70-B654-949C2463F6F4}.Debug|x64.ActiveCfg = Debug|x64
+		{7DF501F1-4BC0-4B70-B654-949C2463F6F4}.Debug|x64.Build.0 = Debug|x64
+		{7DF501F1-4BC0-4B70-B654-949C2463F6F4}.Release|x64.ActiveCfg = Release|x64
+		{7DF501F1-4BC0-4B70-B654-949C2463F6F4}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -27,3 +27,9 @@ compiled with Visual Studio 2019 (v142, x64).
 - 支持全拼和自然码双拼。运行 `GikGinIMESettings.exe`，或在候选窗口
   右上角点“设置”切换。
 - 详细说明见 `winime/README.md`。
+
+- ## 致谢
+
+极键输入法在设计与实现过程中参考了lingooglepinyin开源项目
+
+- **[lingooglepinyin](https://github.com/qgears/libgooglepinyin)**

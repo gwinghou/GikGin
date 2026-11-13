@@ -126,10 +126,11 @@ class CGikGinIME : public ITfTextInputProcessorEx,
   // 打开同目录下的 GikGinIMESettings.exe。
   void OpenSettings();
 
-  // 是否启用了任意一种模糊拼音（声母 z/c/s 或韵母 in/en/an）。
+  // 是否启用了任意一种模糊拼音（声母 z/c/s、n/l 或韵母 in/en/an）。
   bool FuzzyEnabled() const {
     return settings_.fuzzy_z || settings_.fuzzy_c || settings_.fuzzy_s ||
-           settings_.fuzzy_in || settings_.fuzzy_en || settings_.fuzzy_an;
+           settings_.fuzzy_nl || settings_.fuzzy_in ||
+           settings_.fuzzy_en || settings_.fuzzy_an;
   }
 
   // 提交/取消组合串。Commit 之后会清空本次输入状态。

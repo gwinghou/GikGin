@@ -17,7 +17,7 @@
 设置：
   运行 GikGinIMESettings.exe，或在候选窗口右上角点“设置”。
   可以设置全拼/自然码、每页候选数、字体大小、候选词间隔，以及
-  六个模糊拼音开关：z/zh、c/ch、s/sh、in/ing、en/eng、an/ang；
+  七个模糊拼音开关：z/zh、c/ch、s/sh、n/l、in/ing、en/eng、an/ang；
   保存后下一次输入生效。
 
   如果设置程序提示“保存设置失败”，可以直接运行：

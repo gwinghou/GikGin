@@ -39,18 +39,21 @@ std::mutex g_engine_load_mutex;
 
 // 生成模糊拼音的拼写变体，例如 "zong" -> "zong" / "zhong"。
 //
-// 两个分支，按输入的首字母互斥：
+// 三个分支，按输入的首字母互斥：
 //   1. 声母：z/c/s 开头，可以加/减 h（z <-> zh）。少打 h 时优先试补全，
 //      所以 zongguo 先出“中国”而不是“总过”。
 //   2. 韵母：in/en/an（或 ing/eng/ang）开头，可以加/减 g（in <-> ing 等）。
 //      这里**保持原样优先**，精确输入的候选仍排第一，模糊变体排后面，
 //      例如开 an/ang 后打 "ban"，“办”仍是第一、“帮”紧随其后。
+//   3. 声母 n 与 l：长度相同，直接互换即可。同样保持原样优先，
+//      例如开 n/l 后打 "nan"，“南”仍排第一，“兰/蓝”的候选排后面。
 //
 // 最多生成 16 个变体，防止开启多条规则时组合爆炸。
 void BuildFuzzyVariants(const std::string& input, size_t pos,
                         std::string* current, bool fuzzy_z, bool fuzzy_c,
-                        bool fuzzy_s, bool fuzzy_in, bool fuzzy_en,
-                        bool fuzzy_an, std::vector<std::string>* variants) {
+                        bool fuzzy_s, bool fuzzy_nl, bool fuzzy_in,
+                        bool fuzzy_en, bool fuzzy_an,
+                        std::vector<std::string>* variants) {
   if (variants->size() >= 16 || current->size() > 64) return;
 
   if (pos >= input.size()) {
@@ -73,25 +76,25 @@ void BuildFuzzyVariants(const std::string& input, size_t pos,
       current->push_back(ch);
       current->push_back('h');
       BuildFuzzyVariants(input, pos + 1, current, fuzzy_z, fuzzy_c, fuzzy_s,
-                         fuzzy_in, fuzzy_en, fuzzy_an, variants);
+                         fuzzy_nl, fuzzy_in, fuzzy_en, fuzzy_an, variants);
       current->pop_back();
       current->pop_back();
       current->push_back(ch);
       BuildFuzzyVariants(input, pos + 1, current, fuzzy_z, fuzzy_c, fuzzy_s,
-                         fuzzy_in, fuzzy_en, fuzzy_an, variants);
+                         fuzzy_nl, fuzzy_in, fuzzy_en, fuzzy_an, variants);
       current->pop_back();
     } else {
       // 已经打了 h：先按原样（zh），再试去掉 h（z）。
       current->push_back(ch);
       current->push_back('h');
       BuildFuzzyVariants(input, pos + 2, current, fuzzy_z, fuzzy_c, fuzzy_s,
-                         fuzzy_in, fuzzy_en, fuzzy_an, variants);
+                         fuzzy_nl, fuzzy_in, fuzzy_en, fuzzy_an, variants);
       current->pop_back();
       current->pop_back();
       current->push_back(ch);
       // 输入跳过 z、h 两个字符，输出只保留 z。
       BuildFuzzyVariants(input, pos + 2, current, fuzzy_z, fuzzy_c, fuzzy_s,
-                         fuzzy_in, fuzzy_en, fuzzy_an, variants);
+                         fuzzy_nl, fuzzy_in, fuzzy_en, fuzzy_an, variants);
       current->pop_back();
     }
     return;
@@ -115,30 +118,46 @@ void BuildFuzzyVariants(const std::string& input, size_t pos,
       // 已经是长形式（ing 等）：先按原样，再试去掉 g。
       current->append(rule.l);
       BuildFuzzyVariants(input, pos + 3, current, fuzzy_z, fuzzy_c, fuzzy_s,
-                         fuzzy_in, fuzzy_en, fuzzy_an, variants);
+                         fuzzy_nl, fuzzy_in, fuzzy_en, fuzzy_an, variants);
       current->resize(current->size() - 3);
       current->append(rule.s);
       BuildFuzzyVariants(input, pos + 3, current, fuzzy_z, fuzzy_c, fuzzy_s,
-                         fuzzy_in, fuzzy_en, fuzzy_an, variants);
+                         fuzzy_nl, fuzzy_in, fuzzy_en, fuzzy_an, variants);
       current->resize(current->size() - 2);
     } else {
       // 短形式（in 等）：先按原样，再试补上 g。
       current->append(rule.s);
       BuildFuzzyVariants(input, pos + 2, current, fuzzy_z, fuzzy_c, fuzzy_s,
-                         fuzzy_in, fuzzy_en, fuzzy_an, variants);
+                         fuzzy_nl, fuzzy_in, fuzzy_en, fuzzy_an, variants);
       current->resize(current->size() - 2);
       current->append(rule.l);
       BuildFuzzyVariants(input, pos + 2, current, fuzzy_z, fuzzy_c, fuzzy_s,
-                         fuzzy_in, fuzzy_en, fuzzy_an, variants);
+                         fuzzy_nl, fuzzy_in, fuzzy_en, fuzzy_an, variants);
       current->resize(current->size() - 3);
     }
     return;  // 本位置只处理一条韵母规则
   }
 
+  // ===== 分支 3：声母 n 与 l 互换（n/l 不分） =====
+  // 长度相同，直接换字母即可；先保持原样，再换成另一个。
+  // 互换也允许落在韵尾（如 "fen" 会试出 "fel"），查不出候选的
+  // 无效变体在合并时自动忽略，不影响结果。
+  if (fuzzy_nl && (ch == 'n' || ch == 'l')) {
+    current->push_back(ch);
+    BuildFuzzyVariants(input, pos + 1, current, fuzzy_z, fuzzy_c, fuzzy_s,
+                       fuzzy_nl, fuzzy_in, fuzzy_en, fuzzy_an, variants);
+    current->pop_back();
+    current->push_back(ch == 'n' ? 'l' : 'n');  // 互换
+    BuildFuzzyVariants(input, pos + 1, current, fuzzy_z, fuzzy_c, fuzzy_s,
+                       fuzzy_nl, fuzzy_in, fuzzy_en, fuzzy_an, variants);
+    current->pop_back();
+    return;
+  }
+
   // ===== 普通字符：保持原样 =====
   current->push_back(ch);
   BuildFuzzyVariants(input, pos + 1, current, fuzzy_z, fuzzy_c, fuzzy_s,
-                     fuzzy_in, fuzzy_en, fuzzy_an, variants);
+                     fuzzy_nl, fuzzy_in, fuzzy_en, fuzzy_an, variants);
   current->pop_back();
 }
 
@@ -218,8 +237,9 @@ size_t PinyinEngine::Search(const std::string& pinyin) {
 }
 
 size_t PinyinEngine::SearchFuzzy(const std::string& pinyin, bool fuzzy_z,
-                                 bool fuzzy_c, bool fuzzy_s, bool fuzzy_in,
-                                 bool fuzzy_en, bool fuzzy_an) {
+                                 bool fuzzy_c, bool fuzzy_s, bool fuzzy_nl,
+                                 bool fuzzy_in, bool fuzzy_en,
+                                 bool fuzzy_an) {
   if (!open_) {
     candidate_count_ = 0;
     return 0;
@@ -230,8 +250,8 @@ size_t PinyinEngine::SearchFuzzy(const std::string& pinyin, bool fuzzy_z,
 
   std::vector<std::string> variants;
   std::string current;
-  BuildFuzzyVariants(pinyin, 0, &current, fuzzy_z, fuzzy_c, fuzzy_s, fuzzy_in,
-                     fuzzy_en, fuzzy_an, &variants);
+  BuildFuzzyVariants(pinyin, 0, &current, fuzzy_z, fuzzy_c, fuzzy_s, fuzzy_nl,
+                     fuzzy_in, fuzzy_en, fuzzy_an, &variants);
   if (variants.empty()) variants.push_back(pinyin);
 
   // 每个变体单独调用一次 im_search，把前 100 个候选收集到一个列表里。

@@ -31,7 +31,7 @@ class CCandidateWindow {
   void Destroy();
 
   // 设置显示参数。page_size 是每页候选数，font_size 是候选字号，
-  // gap 是候选词之间的水平间隔（都是 96 DPI 下的逻辑像素）。
+  // gap 是候选词之间的间隔，行距、列距都用它（都是 96 DPI 下的逻辑像素）。
   void Configure(int page_size, int font_size, int gap);
 
   // 显示候选。selection 是 candidates 的全局下标（不是当前页内的下标）。

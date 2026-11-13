@@ -30,11 +30,11 @@ class PinyinEngine {
   // 用完整拼音（小写 ASCII，如 "nihao"）搜索，返回候选数量。
   size_t Search(const std::string& pinyin);
 
-  // 模糊拼音搜索：z/zh、c/ch、s/sh、in/ing、en/eng、an/ang 视作等价。
+  // 模糊拼音搜索：z/zh、c/ch、s/sh、n/l、in/ing、en/eng、an/ang 视作等价。
   // 会生成所有拼写变体，合并候选并按原始顺序去重。
   size_t SearchFuzzy(const std::string& pinyin, bool fuzzy_z, bool fuzzy_c,
-                     bool fuzzy_s, bool fuzzy_in, bool fuzzy_en,
-                     bool fuzzy_an);
+                     bool fuzzy_s, bool fuzzy_nl, bool fuzzy_in,
+                     bool fuzzy_en, bool fuzzy_an);
 
   size_t CandidateCount() const { return candidate_count_; }
   // 取第 index 个候选，转成 UTF-16 宽字符串。

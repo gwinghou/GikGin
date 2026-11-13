@@ -8,7 +8,9 @@
 // 左边是“常用 / 外观”侧边栏，右边显示对应页面。
 // 对话框做得比较紧凑，保证在高 DPI 缩放下也能完整显示。
 IDD_SETTINGS DIALOGEX 0, 0, 300, 154
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+// DS_CENTER：让对话框打开时居中显示。
+// 没有它时窗口按模板坐标 (0,0) 落在屏幕左上角。
+STYLE DS_SETFONT | DS_CENTER | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "极键输入法 - 设置"
 FONT 9, "Microsoft YaHei UI"
 BEGIN
@@ -44,19 +46,21 @@ END
 
 // ====================================================================
 // 模糊拼音独立弹窗：由“常用”页的按钮打开，模态运行。
-// 上排是声母（z/zh、c/ch、s/sh），下排是韵母（in/ing、en/eng、an/ang）。
+// 上排是声母（z/zh、c/ch、s/sh、n/l），下排是韵母（in/ing、en/eng、an/ang）。
 // 点“确定”只把勾选状态写回主窗口的内存变量，
 // 真正保存仍由主窗口的“应用/确定”完成。
 // ====================================================================
 IDD_FUZZY DIALOGEX 0, 0, 210, 96
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+// DS_CENTER：同样居中显示在屏幕工作区中央，不再固定在左上角。
+STYLE DS_SETFONT | DS_CENTER | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "模糊拼音"
 FONT 9, "Microsoft YaHei UI"
 BEGIN
     LTEXT           "勾选后，对应拼写视为等价：", IDC_STATIC, 10, 10, 190, 10
-    CHECKBOX        "z / zh", IDC_FUZZY_Z, 15, 28, 55, 12, BS_AUTOCHECKBOX | WS_TABSTOP
-    CHECKBOX        "c / ch", IDC_FUZZY_C, 80, 28, 55, 12, BS_AUTOCHECKBOX | WS_TABSTOP
-    CHECKBOX        "s / sh", IDC_FUZZY_S, 145, 28, 55, 12, BS_AUTOCHECKBOX | WS_TABSTOP
+    CHECKBOX        "z / zh", IDC_FUZZY_Z, 12, 28, 47, 12, BS_AUTOCHECKBOX | WS_TABSTOP
+    CHECKBOX        "c / ch", IDC_FUZZY_C, 59, 28, 47, 12, BS_AUTOCHECKBOX | WS_TABSTOP
+    CHECKBOX        "s / sh", IDC_FUZZY_S, 106, 28, 47, 12, BS_AUTOCHECKBOX | WS_TABSTOP
+    CHECKBOX        "n / l", IDC_FUZZY_NL, 153, 28, 47, 12, BS_AUTOCHECKBOX | WS_TABSTOP
     CHECKBOX        "in / ing", IDC_FUZZY_IN, 15, 46, 60, 12, BS_AUTOCHECKBOX | WS_TABSTOP
     CHECKBOX        "en / eng", IDC_FUZZY_EN, 80, 46, 60, 12, BS_AUTOCHECKBOX | WS_TABSTOP
     CHECKBOX        "an / ang", IDC_FUZZY_AN, 145, 46, 60, 12, BS_AUTOCHECKBOX | WS_TABSTOP

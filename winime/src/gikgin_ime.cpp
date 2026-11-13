@@ -851,8 +851,9 @@ bool CGikGinIME::HandleLetter(wchar_t letter) {
     engine_.Reset();
     if (fuzzy) {
       engine_.SearchFuzzy(pinyin_, settings_.fuzzy_z, settings_.fuzzy_c,
-                          settings_.fuzzy_s, settings_.fuzzy_in,
-                          settings_.fuzzy_en, settings_.fuzzy_an);
+                          settings_.fuzzy_s, settings_.fuzzy_nl,
+                          settings_.fuzzy_in, settings_.fuzzy_en,
+                          settings_.fuzzy_an);
     } else {
       engine_.Search(pinyin_);
     }
@@ -862,8 +863,9 @@ bool CGikGinIME::HandleLetter(wchar_t letter) {
     if (fuzzy) {
       engine_.Reset();
       engine_.SearchFuzzy(pinyin_, settings_.fuzzy_z, settings_.fuzzy_c,
-                          settings_.fuzzy_s, settings_.fuzzy_in,
-                          settings_.fuzzy_en, settings_.fuzzy_an);
+                          settings_.fuzzy_s, settings_.fuzzy_nl,
+                          settings_.fuzzy_in, settings_.fuzzy_en,
+                          settings_.fuzzy_an);
     } else {
       engine_.Search(pinyin_);
     }
@@ -906,8 +908,9 @@ bool CGikGinIME::HandleBackspace() {
 
     engine_.Reset();
     engine_.SearchFuzzy(pinyin_, settings_.fuzzy_z, settings_.fuzzy_c,
-                        settings_.fuzzy_s, settings_.fuzzy_in,
-                        settings_.fuzzy_en, settings_.fuzzy_an);
+                        settings_.fuzzy_s, settings_.fuzzy_nl,
+                        settings_.fuzzy_in, settings_.fuzzy_en,
+                        settings_.fuzzy_an);
     selection_ = 0;
     RefreshCandidates();
     composing_ = PinyinAsWide();

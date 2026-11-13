@@ -15,12 +15,13 @@ struct ImeSettings {
   // 候选窗口
   int page_size = 15;       // 每页候选个数
   int font_size = 18;       // 候选汉字字号（逻辑像素）
-  int candidate_gap = 4;    // 候选词之间的水平间隔（逻辑像素）
+  int candidate_gap = 4;    // 候选词之间的间隔，行距列距都用（逻辑像素）
 
   // 模糊拼音：对应拼写视为等价
   bool fuzzy_z = false;    // z / zh
   bool fuzzy_c = false;    // c / ch
   bool fuzzy_s = false;    // s / sh
+  bool fuzzy_nl = false;   // n / l
   bool fuzzy_in = false;   // in / ing
   bool fuzzy_en = false;   // en / eng
   bool fuzzy_an = false;   // an / ang

@@ -12,6 +12,7 @@
 #define IDC_FUZZY_Z 1006
 #define IDC_FUZZY_C 1007
 #define IDC_FUZZY_S 1008
+#define IDC_FUZZY_NL 1023
 #define IDC_FUZZY_IN 1020
 #define IDC_FUZZY_EN 1021
 #define IDC_FUZZY_AN 1022

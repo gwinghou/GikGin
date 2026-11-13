@@ -253,8 +253,11 @@ void CCandidateWindow::Layout(HDC dc) {
   // 保底宽度，保证顶部拼音、页码和“设置”按钮不会挤在一起。
   window_width_ = std::max(window_width_, Scale(260, dpi_));
   if (page_count_ > 1) footer_height_ = font_small_height_ + Scale(8, dpi_);
+  // 高度同样加上行与行之间的间隔 (rows-1)*gap_，和列距保持一致。
+  // rows_ 为 0（没有候选）时不能减 1，所以单独判断。
+  const int row_gaps = rows_ > 0 ? (rows_ - 1) * gap_ : 0;
   window_height_ = padding_ * 2 + header_height_ + rows_ * row_height_ +
-                   footer_height_;
+                   row_gaps + footer_height_;
 
   // 右上角留一个“设置”按钮区域；页码显示在它左边。
   int settings_width = Scale(34, dpi_);
@@ -263,14 +266,19 @@ void CCandidateWindow::Layout(HDC dc) {
   settings_rect_.right = window_width_ - padding_;
   settings_rect_.bottom = padding_ + header_height_;
 
+  // 每个候选一个格子，行距和列距都用 gap_：
+  //   x 方向：每列错开 (cell_width_ + gap_)
+  //   y 方向：每行错开 (row_height_ + gap_)
+  // 格子本身保持 cell_width_ x row_height_ 不变（旧代码用
+  // row_height_ - gap_ 当格子高，间隔一大选中框会被压扁）。
   cell_rects_.clear();
   cell_rects_.resize(visible);
   for (int i = 0; i < visible; ++i) {
     int column = i % columns_;
     int row = i / columns_;
     int x = padding_ + column * (cell_width_ + gap_);
-    int y = padding_ + header_height_ + row * row_height_;
-    RECT rect = {x, y, x + cell_width_, y + row_height_ - gap_};
+    int y = padding_ + header_height_ + row * (row_height_ + gap_);
+    RECT rect = {x, y, x + cell_width_, y + row_height_};
     cell_rects_[i] = rect;
   }
 }

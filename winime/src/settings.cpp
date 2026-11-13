@@ -18,6 +18,7 @@ const wchar_t kCandidateGap[] = L"CandidateGap";
 const wchar_t kFuzzyZ[] = L"FuzzyZ";
 const wchar_t kFuzzyC[] = L"FuzzyC";
 const wchar_t kFuzzyS[] = L"FuzzyS";
+const wchar_t kFuzzyNl[] = L"FuzzyNl";
 const wchar_t kFuzzyIn[] = L"FuzzyIn";
 const wchar_t kFuzzyEn[] = L"FuzzyEn";
 const wchar_t kFuzzyAn[] = L"FuzzyAn";
@@ -93,6 +94,8 @@ bool WriteFallback(const ImeSettings& settings) {
                              settings.fuzzy_c ? L"1" : L"0", path.c_str());
   WritePrivateProfileStringW(L"Settings", L"FuzzyS",
                              settings.fuzzy_s ? L"1" : L"0", path.c_str());
+  WritePrivateProfileStringW(L"Settings", L"FuzzyNl",
+                             settings.fuzzy_nl ? L"1" : L"0", path.c_str());
   WritePrivateProfileStringW(L"Settings", L"FuzzyIn",
                              settings.fuzzy_in ? L"1" : L"0", path.c_str());
   WritePrivateProfileStringW(L"Settings", L"FuzzyEn",
@@ -130,6 +133,8 @@ bool ReadFallback(ImeSettings* settings) {
       GetPrivateProfileIntW(L"Settings", L"FuzzyC", 0, path.c_str()) != 0;
   settings->fuzzy_s =
       GetPrivateProfileIntW(L"Settings", L"FuzzyS", 0, path.c_str()) != 0;
+  settings->fuzzy_nl =
+      GetPrivateProfileIntW(L"Settings", L"FuzzyNl", 0, path.c_str()) != 0;
   settings->fuzzy_in =
       GetPrivateProfileIntW(L"Settings", L"FuzzyIn", 0, path.c_str()) != 0;
   settings->fuzzy_en =
@@ -195,6 +200,7 @@ ImeSettings LoadSettings() {
   settings.fuzzy_z = ReadDword(key, kFuzzyZ, 0) != 0;
   settings.fuzzy_c = ReadDword(key, kFuzzyC, 0) != 0;
   settings.fuzzy_s = ReadDword(key, kFuzzyS, 0) != 0;
+  settings.fuzzy_nl = ReadDword(key, kFuzzyNl, 0) != 0;
   settings.fuzzy_in = ReadDword(key, kFuzzyIn, 0) != 0;
   settings.fuzzy_en = ReadDword(key, kFuzzyEn, 0) != 0;
   settings.fuzzy_an = ReadDword(key, kFuzzyAn, 0) != 0;
@@ -233,6 +239,8 @@ bool SaveSettings(const ImeSettings& settings, unsigned long* error_code) {
         WriteDword(key, kFuzzyC, settings.fuzzy_c ? 1 : 0) && registry_ok;
     registry_ok =
         WriteDword(key, kFuzzyS, settings.fuzzy_s ? 1 : 0) && registry_ok;
+    registry_ok =
+        WriteDword(key, kFuzzyNl, settings.fuzzy_nl ? 1 : 0) && registry_ok;
     registry_ok =
         WriteDword(key, kFuzzyIn, settings.fuzzy_in ? 1 : 0) && registry_ok;
     registry_ok =

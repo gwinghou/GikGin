@@ -28,6 +28,7 @@ struct SettingsData {
   bool fuzzy_z;
   bool fuzzy_c;
   bool fuzzy_s;
+  bool fuzzy_nl;
   bool fuzzy_in;
   bool fuzzy_en;
   bool fuzzy_an;
@@ -111,6 +112,7 @@ ImeSettings ReadSettings(HWND dialog, const SettingsData& data) {
   settings.fuzzy_z = data.fuzzy_z;
   settings.fuzzy_c = data.fuzzy_c;
   settings.fuzzy_s = data.fuzzy_s;
+  settings.fuzzy_nl = data.fuzzy_nl;
   settings.fuzzy_in = data.fuzzy_in;
   settings.fuzzy_en = data.fuzzy_en;
   settings.fuzzy_an = data.fuzzy_an;
@@ -157,6 +159,8 @@ INT_PTR CALLBACK FuzzyDialogProc(HWND dialog, UINT message, WPARAM wparam,
                        data->fuzzy_c ? BST_CHECKED : BST_UNCHECKED);
         CheckDlgButton(dialog, IDC_FUZZY_S,
                        data->fuzzy_s ? BST_CHECKED : BST_UNCHECKED);
+        CheckDlgButton(dialog, IDC_FUZZY_NL,
+                       data->fuzzy_nl ? BST_CHECKED : BST_UNCHECKED);
         CheckDlgButton(dialog, IDC_FUZZY_IN,
                        data->fuzzy_in ? BST_CHECKED : BST_UNCHECKED);
         CheckDlgButton(dialog, IDC_FUZZY_EN,
@@ -180,6 +184,8 @@ INT_PTR CALLBACK FuzzyDialogProc(HWND dialog, UINT message, WPARAM wparam,
                 IsDlgButtonChecked(dialog, IDC_FUZZY_C) == BST_CHECKED;
             data->fuzzy_s =
                 IsDlgButtonChecked(dialog, IDC_FUZZY_S) == BST_CHECKED;
+            data->fuzzy_nl =
+                IsDlgButtonChecked(dialog, IDC_FUZZY_NL) == BST_CHECKED;
             data->fuzzy_in =
                 IsDlgButtonChecked(dialog, IDC_FUZZY_IN) == BST_CHECKED;
             data->fuzzy_en =
@@ -221,6 +227,7 @@ INT_PTR CALLBACK SettingsDialogProc(HWND dialog, UINT message, WPARAM wparam,
         data->fuzzy_z = settings.fuzzy_z;
         data->fuzzy_c = settings.fuzzy_c;
         data->fuzzy_s = settings.fuzzy_s;
+        data->fuzzy_nl = settings.fuzzy_nl;
         data->fuzzy_in = settings.fuzzy_in;
         data->fuzzy_en = settings.fuzzy_en;
         data->fuzzy_an = settings.fuzzy_an;
@@ -350,7 +357,8 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int) {
   LocalFree(argv);
 
   // 主窗口和模糊拼音弹窗共享的数据，生命周期覆盖整个对话框。
-  SettingsData data = {instance, false, false, false, false, false, false};
+  SettingsData data = {
+      instance, false, false, false, false, false, false, false};
   DialogBoxParamW(instance, MAKEINTRESOURCEW(IDD_SETTINGS), NULL,
                   SettingsDialogProc, reinterpret_cast<LPARAM>(&data));
   return 0;
